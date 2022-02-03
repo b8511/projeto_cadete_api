@@ -15,11 +15,10 @@ def error(status_code,coin_id):
 
 def get_list():
     tries = 0
-    while (tries > 3):
+    while (tries < 3):
         coinfirm = requests.get("https://api.coingecko.com/api/v3/coins/list/")
         if coinfirm.status_code >= 200 and coinfirm.status_code < 299:
-            coins_list = requests.get("https://api.coingecko.com/api/v3/coins/list/")
-            return coins_list.json()
+            return requests.get("https://api.coingecko.com/api/v3/coins/list/").json()
         elif coinfirm.status_code == 429:
             time.sleep(1)
             if tries > 3:
