@@ -1,8 +1,26 @@
 import requests
+"""
+O import do fastapi demontra que o componente responsável por comunicar com o CoinGecko
+está coupled ao contexto do FastAPI, isto e um erro grave.
+Neste momento, se fores re-utilizar este codigo no futuro, noutro projecto, vais ser obrigado a importar a biblioteca (grande) do FastAPI
+e todas as suas dependencias.
+
+Parece-me que fizeste isso para poderes dar raise da HTTPException, e assim conseguires levantar a excecao que precisas para
+emitir as mensagens de erro do FastAPI, e isso faz sentido, mas para teres o sistema bem dividido isto tem de ser feito em 2 partes.
+
+Neste componente, das raise da Exception correta (as que tinhas criado no repo antigo estao perfeitamente bem), e, noutro componente logico (router!)
+vais dar catch dessas Exceptions, e entao levantar a HTTPException.
+"""
 from fastapi import HTTPException, status
 import time
       
 
+"""
+O nome desta funcao esta muito ambiguo na primeira leitura (identifica erros? levanta erros?)...
+Sugiro que mudes o nome para raise_errors, algo ja mais explicito.
+
+Novamente, dar raise das Exceptions que foram criadas na versao antiga.
+"""
 def error(status_code,coin_id):
     if status_code >= 200 and status_code < 299 :
         return True
@@ -16,9 +34,9 @@ def error(status_code,coin_id):
 def get_list():
     tries = 0
     while (tries < 3):
-        coinfirm = requests.get("https://api.coingecko.com/api/v3/coins/list/")
+        coinfirm = requests.get("https://api.coingecko.com/api/v3/coins/list/") # Nome pouco intuitivo para esta variavel, normalmente usa-se res ou response.
         if coinfirm.status_code >= 200 and coinfirm.status_code < 299:
-            return requests.get("https://api.coingecko.com/api/v3/coins/list/").json()
+            return requests.get("https://api.coingecko.com/api/v3/coins/list/").json() # Esta linha vai re-fazer o request, o que queres fazer é coinfirm.json().
         elif coinfirm.status_code == 429:
             time.sleep(1)
             if tries > 3:
