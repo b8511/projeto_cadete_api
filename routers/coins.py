@@ -47,6 +47,8 @@ def coingecko_api_price_id(coin_id):
 
     return coin_price 
 
-
+@router.get('/all_prices')
+def coingecko_api_all_prices():
+    return coingecko.get_price_all()
 
             
