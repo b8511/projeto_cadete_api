@@ -1,9 +1,14 @@
 from fastapi import FastAPI
 from routers import coins
-import global_can
+import models
+from database import SessionLocal, engine
+from sqlalchemy.orm import Session
 
-global_can.init()
+
 
 app = FastAPI() 
+
+models.Base.metadata.create_all(bind=engine)
+
 
 app.include_router(coins.router)

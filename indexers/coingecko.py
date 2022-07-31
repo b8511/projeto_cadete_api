@@ -1,6 +1,6 @@
 from external_apis import coingecko
 from exceptions import Re_Exceptions
-import time
+import time, database
 
 
 def get_list():
@@ -11,8 +11,12 @@ def get_price(coin_id):
     return coingecko.get_price(coin_id)
 
 
-def get_price_all():
-    list_data = coingecko.get_list()
+def get_price_all(db):
+    if not database.check_if_db_empty(db) and not (timed_out_items := database.check_if_db_items_timedout(db,300)):
+        print("Database_cheks")
+        list_data = database.check_db_out(db)
+    else:
+        list_data = coingecko.get_list()
     id_price_dic = {}
     coin_id_list = []
     numb = 0
