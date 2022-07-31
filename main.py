@@ -1,8 +1,7 @@
 from fastapi import FastAPI
 from routers import coins
 import models
-from database import SessionLocal, engine
-from sqlalchemy.orm import Session
+from database import engine
 
 
 
